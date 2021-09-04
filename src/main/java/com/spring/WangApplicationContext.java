@@ -29,6 +29,7 @@ public class WangApplicationContext {
 
         // 扫描
         scan(configClass);
+        // 单例bean
         beanDefinitionMap.forEach((beanName,beanDefinition)->{
             if("singleton".equals(beanDefinition.getScope())){
                 singletonMap.put(beanName,createBean(beanName,beanDefinition));
@@ -36,10 +37,12 @@ public class WangApplicationContext {
         });
     }
 
+    // 创建bean
     private Object createBean(String beanName, BeanDefinition beanDefinition) {
         Class clazz = beanDefinition.getType();
         Object instance = null;
         try {
+            // 在此处可以修改根据有参构造,byName或者byType获取实例
             instance = clazz.getConstructor().newInstance();
             // 依赖注入
             for (Field field : clazz.getDeclaredFields()) {
@@ -73,6 +76,10 @@ public class WangApplicationContext {
         return instance;
     }
 
+    /**
+     * 根据ComponentScan注解扫描bean
+     * @param configClass
+     */
     private void scan(Class configClass) {
         if (this.configClass.isAnnotationPresent(ComponentScan.class)) {
             ComponentScan componentScanAnnotation = (ComponentScan) configClass.getAnnotation(ComponentScan.class);
@@ -133,6 +140,11 @@ public class WangApplicationContext {
         }
     }
 
+    /**
+     * 根据beanName获取bean
+     * @param beanName
+     * @return
+     */
     public Object getBean(String beanName) {
         if (!beanDefinitionMap.containsKey(beanName)) {
             throw new RuntimeException("不包含"+beanName);

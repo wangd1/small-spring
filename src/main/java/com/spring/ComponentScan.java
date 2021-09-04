@@ -6,6 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * Component扫描
  * @author wangd1
  */
 @Retention(RetentionPolicy.RUNTIME)
