@@ -5,10 +5,7 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author wangd1
@@ -92,7 +89,7 @@ public class WangApplicationContext {
                 File file = new File(resource.getFile());
                 // 获取类文件
                 if(file.isDirectory()){
-                    for (File f : file.listFiles()) {
+                    for (File f : Objects.requireNonNull(file.listFiles())) {
                         String absolutePath = f.getAbsolutePath();
                         absolutePath = absolutePath.substring(absolutePath.indexOf("com"),absolutePath.indexOf(".class"));
                         absolutePath = absolutePath.replace("/",".");
@@ -123,15 +120,8 @@ public class WangApplicationContext {
                                 }
                                 beanDefinitionMap.put(beanName,beanDefinition);
                             }
-                        } catch (ClassNotFoundException e) {
-                            e.printStackTrace();
-                        } catch (InvocationTargetException e) {
-                            e.printStackTrace();
-                        } catch (InstantiationException e) {
-                            e.printStackTrace();
-                        } catch (IllegalAccessException e) {
-                            e.printStackTrace();
-                        } catch (NoSuchMethodException e) {
+                        } catch (ClassNotFoundException | InvocationTargetException | NoSuchMethodException |
+                                 IllegalAccessException | InstantiationException e) {
                             e.printStackTrace();
                         }
                     }
